@@ -1,0 +1,4 @@
+shimmer
+*.o
+.depend
+compile_commands.json
