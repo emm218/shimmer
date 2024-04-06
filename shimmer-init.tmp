@@ -26,8 +26,11 @@ name=$0
 
 usage() { echo "usage: shimmer init [-h] [DIR]"; }
 show_help() {
+echo "shimmer vVERSION"
+usage
 echo \
-"create a new shimmer project
+"
+create a new shimmer project
 
 arguments:
   DIR   the directory to initialize the project in. defaults to .
@@ -39,7 +42,6 @@ options:
 while getopts ":h" o; do
     case "$o" in
         h)
-            usage
             show_help
             exit 0
             ;;

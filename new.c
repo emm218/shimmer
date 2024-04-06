@@ -22,6 +22,8 @@
 static void usage(FILE *);
 static void help(void);
 
+void version(void);
+
 int
 new_main(int argc, char **argv)
 {
@@ -33,6 +35,7 @@ new_main(int argc, char **argv)
 	while ((c = getopt(argc, argv, "hDc:t:")) != -1) {
 		switch (c) {
 		case 'h':
+			version();
 			usage(stdout);
 			help();
 			return 0;
@@ -80,7 +83,7 @@ help(void)
 {
 	// clang-format off
 	printf(
-"generate a new content file with front matter\n"
+"\ngenerate a new content file with front matter\n"
 "\n"
 "arguments:\n"
 "  PATH    the path to create the new content file in\n"

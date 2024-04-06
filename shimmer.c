@@ -18,12 +18,16 @@
 #include <string.h>
 #include <unistd.h>
 
+#ifndef VERSION
+#error "VERSION should be defined"
+#endif
+
 #define STR(S)	#S
 #define XSTR(S) STR(S)
-#define VERSION "0.1.0"
 
 int new_main(int, char **);
 
+void version(void);
 static void usage(FILE *);
 static void help(void);
 
@@ -44,11 +48,12 @@ main(int argc, char **argv)
 	while ((c = getopt(argc, argv, "+hvqc:o:")) != -1) {
 		switch (c) {
 		case 'h':
+			version();
 			usage(stdout);
 			help();
 			return 0;
 		case 'v':
-			printf(VERSION "\n");
+			version();
 			return 0;
 		case 'q':
 			verbose = 0;
@@ -107,7 +112,7 @@ help(void)
 {
 	// clang-format off
 	printf(
-"builds a static site from a project directory\n"
+"\nbuilds a static site from a project directory\n"
 "\n"
 "options:\n"
 "  -h         display help and exit\n"
@@ -125,4 +130,10 @@ help(void)
 "try shimmer COMMAND -h for help on subcommands\n"
 	);
 	// clang-format on
+}
+
+void
+version(void)
+{
+	printf("shimmer v" XSTR(VERSION) "\n");
 }

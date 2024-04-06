@@ -2,8 +2,11 @@ DESTDIR ?= /usr/local
 DATADIR ?= $(DESTDIR)/share/shimmer
 BINDIR ?= $(DESTDIR)/bin
 
+VERSION=0.1.0
+
 CC=cc
-CFLAGS+=-Wall -Wextra -Werror -Iinclude -DBINDIR=$(BINDIR)
+CFLAGS+=-Wall -Wextra -Werror -Iinclude
+CFLAGS+=-DBINDIR=$(BINDIR) -DVERSION=$(VERSION)
 
 SRC:=$(wildcard *.c) $(wildcard vendor/*.c)
 
@@ -18,7 +21,7 @@ release: clean all
 all: shimmer shimmer-init
 
 shimmer-init: shimmer-init.tmp
-	sed '21,22d;s/DATADIR/$(subst /,\/,$(DATADIR))/' $^ > $@
+	sed '21,22d;s/DATADIR/$(subst /,\/,$(DATADIR))/;s/VERSION/$(VERSION)/' $^ > $@
 	chmod +x $@
 
 shimmer: $(SRC:.c=.o)
