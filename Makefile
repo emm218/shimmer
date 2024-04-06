@@ -17,7 +17,7 @@ release: clean all
 all: shimmer shimmer-init
 
 shimmer-init: shimmer-init.tmp
-	sed '3,4d;s/DATADIR/$(subst /,\/,$(DATADIR))/' $^ > $@
+	sed '19,20d;s/DATADIR/$(subst /,\/,$(DATADIR))/' $^ > $@
 	chmod +x $@
 
 shimmer: $(SRC:.c=.o)
