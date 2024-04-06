@@ -18,13 +18,9 @@
 #include <string.h>
 #include <unistd.h>
 
+#define STR(S)	#S
+#define XSTR(S) STR(S)
 #define VERSION "0.1.0"
-
-#ifdef DEBUG
-#define INIT_PATH "./shimmer-init"
-#else
-#define INIT_PATH "shimmer-init"
-#endif
 
 int new_main(int, char **);
 
@@ -71,7 +67,7 @@ main(int argc, char **argv)
 	if (optind == 1 && argc > 1) {
 		if (strncmp(argv[1], "init", 5) == 0) {
 			argv[1] = argv[0];
-			execv(INIT_PATH, argv + 1);
+			execv(XSTR(BINDIR) "/shimmer-init", argv + 1);
 			perror(argv[0]);
 			return 1;
 		} else if (strncmp(argv[1], "new", 4) == 0) {

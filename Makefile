@@ -3,12 +3,13 @@ DATADIR ?= $(DESTDIR)/share/shimmer
 BINDIR ?= $(DESTDIR)/bin
 
 CC=cc
-CFLAGS+=-Wall -Wextra -Werror -Iinclude
+CFLAGS+=-Wall -Wextra -Werror -Iinclude -DBINDIR=$(BINDIR)
 
 SRC:=$(wildcard *.c) $(wildcard vendor/*.c)
 
-debug: CFLAGS+=-g -DDEBUG
+debug: CFLAGS+=-g
 debug: DATADIR=share
+debug: BINDIR=.
 debug: all
 
 release: CFLAGS+=-O2
