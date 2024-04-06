@@ -15,9 +15,111 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>
  */
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+
+#define VERSION "0.1.0"
+
+int init_main(int, char **);
+int new_main(int, char **);
+
+static void usage(FILE *);
+static void help(void);
+
+int verbose = 1;
+#define MESSAGE(msg, ...) \
+	if (verbose)      \
+		printf("%s:" msg, prog_name, ##__VA_ARGS__);
 
 int
-main(void)
+main(int argc, char **argv)
 {
-	printf("hello, world!\n");
+	int c;
+	char *config_path, *out_path;
+
+	config_path = NULL;
+	out_path = "public";
+
+	while ((c = getopt(argc, argv, "+hvqc:o:")) != -1) {
+		switch (c) {
+		case 'h':
+			usage(stdout);
+			help();
+			return 0;
+		case 'v':
+			printf(VERSION "\n");
+			return 0;
+		case 'q':
+			verbose = 0;
+			break;
+		case 'c':
+			config_path = optarg;
+			break;
+		case 'o':
+			out_path = optarg;
+			break;
+		case '?':
+			usage(stderr);
+			return 1;
+		}
+	}
+	if (optind == 1 && argc > 1) {
+		if (strncmp(argv[1], "init", 5) == 0) {
+			argv[1] = argv[0];
+			return init_main(argc - 1, argv + 1);
+		} else if (strncmp(argv[1], "new", 4) == 0) {
+			argv[1] = argv[0];
+			return new_main(argc - 1, argv + 1);
+		} else {
+			fprintf(stderr, "%s: unrecognized subcommand '%s'\n",
+			    argv[0], argv[1]);
+			usage(stderr);
+			return 1;
+		}
+	} else if (optind < argc) {
+		fprintf(stderr, "%s: extraneous argument '%s'\n", argv[0],
+		    argv[optind]);
+		usage(stderr);
+		return 1;
+	}
+
+	(void)config_path;
+	(void)out_path;
+	(void)verbose;
+
+	return 0;
+}
+
+void
+usage(FILE *out)
+{
+	fprintf(out,
+	    "usage: shimmer [-hvq] [-c FILE] [-o DIR]\n"
+	    "       shimmer init [-h] [DIR]\n"
+	    "       shimmer new  [-h] [-c FILE] [-t TYPE] PATH\n");
+}
+
+void
+help(void)
+{
+	// clang-format off
+	printf(
+"builds a static site from a project directory\n"
+"\n"
+"options:\n"
+"  -h         display help and exit\n"
+"  -v         display version information and exit\n"
+"  -q         suppress output during build process\n"
+"  -c FILE    use the config file FILE. if unspecified, the parent directories\n"
+"             will be searched for a `shimmer.yaml` file\n"
+"  -o DIR     write output to DIR. overrides the value specified in the config\n"
+"             file. defaults to 'public'\n"
+"\n"
+"subcommands:\n"
+"  init    create a shimmer project\n"
+"  new     create a new content file in a project\n"
+"\n"
+"try shimmer COMMAND -h for help on subcommands\n"
+	);
+	// clang-format on
 }
