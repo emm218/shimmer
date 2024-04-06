@@ -29,7 +29,7 @@ static void help(void);
 int verbose = 1;
 #define MESSAGE(msg, ...) \
 	if (verbose)      \
-		printf("%s:" msg, prog_name, ##__VA_ARGS__);
+		printf("%s: " msg, prog_name, ##__VA_ARGS__);
 
 int
 main(int argc, char **argv)
@@ -96,7 +96,7 @@ usage(FILE *out)
 	fprintf(out,
 	    "usage: shimmer [-hvq] [-c FILE] [-o DIR]\n"
 	    "       shimmer init [-h] [DIR]\n"
-	    "       shimmer new  [-h] [-c FILE] [-t TYPE] PATH\n");
+	    "       shimmer new  [-hD] [-t TYPE] PATH\n");
 }
 
 void
@@ -111,7 +111,7 @@ help(void)
 "  -v         display version information and exit\n"
 "  -q         suppress output during build process\n"
 "  -c FILE    use the config file FILE. if unspecified, the parent directories\n"
-"             will be searched for a `shimmer.yaml` file\n"
+"             will be searched for a `shimmer.toml` file\n"
 "  -o DIR     write output to DIR. overrides the value specified in the config\n"
 "             file. defaults to 'public'\n"
 "\n"

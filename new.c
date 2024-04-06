@@ -7,17 +7,19 @@ static void help(void);
 int
 new_main(int argc, char **argv)
 {
-	int c;
-	char *type, *config_path, *out_path;
+	int c, draft;
+	char *type, *out_path;
 
-	while ((c = getopt(argc, argv, "hc:t:")) != -1) {
+	draft = 1;
+
+	while ((c = getopt(argc, argv, "hDc:t:")) != -1) {
 		switch (c) {
 		case 'h':
 			usage(stdout);
 			help();
 			return 0;
-		case 'c':
-			config_path = optarg;
+		case 'D':
+			draft = 0;
 			break;
 		case 't':
 			type = optarg;
@@ -29,7 +31,7 @@ new_main(int argc, char **argv)
 	}
 
 	(void)type;
-	(void)config_path;
+	(void)draft;
 
 	if (optind == argc - 1)
 		out_path = argv[optind];
@@ -53,7 +55,7 @@ new_main(int argc, char **argv)
 void
 usage(FILE *out)
 {
-	fprintf(out, "usage: shimmer new [-h] [-c FILE] [-t TYPE] PATH\n");
+	fprintf(out, "usage: shimmer new [-hD] [-t TYPE] PATH\n");
 }
 
 void
@@ -61,15 +63,14 @@ help(void)
 {
 	// clang-format off
 	printf(
-"simple static site generator - new subcommand\n"
+"generate a new content file with front matter\n"
 "\n"
 "arguments:\n"
 "  PATH    the path to create the new content file in\n"
 "\n"
 "options:\n"
 "  -h         display help and exit\n"
-"  -c FILE    use the config file FILE. if unspecified, the parent directories\n"
-"             will be searched for a `shimmer.yaml` file\n"
+"  -D         don't mark the newly created file as a draft\n"
 "  -t TYPE    the content type for this page. if unspecified will be inferred\n"
 "             from PATH. see the documentation for more on content types\n"
 	);
