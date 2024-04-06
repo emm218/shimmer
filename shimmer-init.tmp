@@ -2,15 +2,45 @@
 
 echo "$0: this script needs to be processed by the makefile before use"
 exit 1;
-
 data_dir=DATADIR
 
-project_dirs="content static theme theme/templates theme/static"
+name=$0
+
+usage() { echo "usage: shimmer init [-h] [DIR]"; }
+show_help() {
+echo \
+"create a new shimmer project
+
+arguments:
+  DIR   the directory to initialize the project in. defaults to .
+
+options:
+  -h    display help and exit"
+}
+
+while getopts ":h" o; do
+    case "$o" in
+        h)
+            usage
+            show_help
+            exit 0
+            ;;
+        *)
+            echo "$0: invalid option -- '${OPTARG}'" >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
 
 if [ $2 ]; then
-    echo "$0: extraneous argument '$2'"
+    echo "$name: extraneous argument '$2'" >&2
+    usage >&2
     exit 1
 fi
+
+project_dirs="content static theme theme/templates theme/static"
 
 mkdir -p "$1"
 for d in $project_dirs; do
@@ -19,7 +49,7 @@ done
 
 cp "$data_dir/shimmer.def.toml" "$1/shimmer.toml"
 if [ ! -e $data_dir/templates/* ]; then
-    exit
+    exit 0
 fi
 
 for f in "$data_dir"/templates/*; do
