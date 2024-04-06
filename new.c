@@ -33,19 +33,18 @@ new_main(int argc, char **argv)
 	(void)type;
 	(void)draft;
 
-	if (optind == argc - 1)
-		out_path = argv[optind];
-	else if (optind == argc) {
+	if (optind == argc) {
 		fprintf(stderr, "%s: please provide a path\n", argv[0]);
 		usage(stderr);
 		return 1;
-
 	} else if (optind + 1 < argc) {
 		fprintf(stderr, "%s: extraneous argument '%s'\n", argv[0],
 		    argv[optind + 1]);
 		usage(stderr);
 		return 1;
 	}
+
+	out_path = argv[optind];
 
 	printf("%s\n", out_path);
 
