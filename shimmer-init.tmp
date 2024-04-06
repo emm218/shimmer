@@ -1,0 +1,28 @@
+#!/bin/env sh
+
+echo "$0: this script needs to be processed by the makefile before use"
+exit 1;
+
+data_dir=DATADIR
+
+project_dirs="content static theme theme/templates theme/static"
+
+if [ $2 ]; then
+    echo "$0: extraneous argument '$2'"
+    exit 1
+fi
+
+mkdir -p "$1"
+for d in $project_dirs; do
+    mkdir -p "$1/$d"
+done
+
+cp "$data_dir/shimmer.def.toml" "$1/shimmer.toml"
+if [ ! -e $data_dir/templates/* ]; then
+    exit
+fi
+
+for f in "$data_dir"/templates/*; do
+    f=${f#$data_dir}
+    cp "$data_dir$f" "$1/theme${f/.def}"
+done

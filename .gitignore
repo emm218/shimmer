@@ -1,4 +1,9 @@
 shimmer
+shimmer-init
+
+example
+compile_commands.json
+
 *.o
 .depend
-compile_commands.json
+.cache

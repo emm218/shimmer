@@ -1,16 +1,20 @@
+#include <errno.h>
 #include <stdio.h>
 #include <unistd.h>
 
 static void usage(FILE *);
 static void help(void);
 
+#ifdef DEBUG
+#define INIT_PATH "./shimmer-init"
+#else
+#define INIT_PATH "shimmer-init"
+#endif
+
 int
 init_main(int argc, char **argv)
 {
 	int c;
-	char *dir;
-
-	dir = ".";
 
 	while ((c = getopt(argc, argv, "h")) != -1) {
 		switch (c) {
@@ -24,18 +28,9 @@ init_main(int argc, char **argv)
 		}
 	}
 
-	if (optind == argc - 1)
-		dir = argv[optind];
-	else if (optind + 1 < argc) {
-		fprintf(stderr, "%s: extraneous argument '%s'\n", argv[0],
-		    argv[optind + 1]);
-		usage(stderr);
-		return 1;
-	}
-
-	printf("%s\n", dir);
-
-	return 0;
+	execv(INIT_PATH, argv);
+	perror(argv[0]);
+	return errno;
 }
 
 void

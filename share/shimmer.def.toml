@@ -1,0 +1,11 @@
+title = "my new shimmer site"
+base_url = "https://example.org"
+description = "a really cool site!"
+
+# any of the flags supported by md4c can be enabled or disabled here. see
+# <https://github.com/mity/md4c?tab=readme-ov-file#markdown-extensions> for
+# details
+[markdown]
+tables = true
+wikilinks = true
+indented_code_blocks = false

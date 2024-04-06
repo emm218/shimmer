@@ -1,15 +1,31 @@
+DESTDIR ?= /usr/local
+DATADIR ?= $(DESTDIR)/share/shimmer
+BINDIR ?= $(DESTDIR)/bin
+
 CC=cc
-CFLAGS+=-Wall -Wextra -Werror
+CFLAGS+=-Wall -Wextra -Werror -Iinclude
 
-SRC:=$(wildcard *.c)
+SRC:=$(wildcard *.c) $(wildcard vendor/*.c)
 
-debug: CFLAGS+=-g
-debug: shimmer
+debug: CFLAGS+=-g -DDEBUG
+debug: DATADIR=share
+debug: all
 
 release: CFLAGS+=-O2
-release: clean shimmer
+release: clean all
+
+all: shimmer shimmer-init
+
+shimmer-init: shimmer-init.tmp
+	sed '3,5d;s/DATADIR/$(subst /,\/,$(DATADIR))/' $^ > $@
+	chmod +x $@
 
 shimmer: $(SRC:.c=.o)
+
+install: release
+	install -D -t$(BINDIR) shimmer shimmer-init
+	mkdir -p $(DATADIR)
+	cp -r share/* $(DATADIR)
 
 compile_commands.json: Makefile
 	$(CLEAN)
@@ -22,6 +38,6 @@ compile_commands.json: Makefile
 include $(patsubst %.c, .depend/%.d, $(SRC))
 
 clean:
-	rm -f *.o shimmer
+	rm -f *.o shimmer shimmer-init
 
 .PHONY: clean
