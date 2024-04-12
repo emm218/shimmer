@@ -6,9 +6,9 @@ VERSION=0.1.0
 
 CC=cc
 CFLAGS+=-Wall -Wextra -Werror -Iinclude
-CFLAGS+=-DBINDIR=$(BINDIR) -DVERSION=$(VERSION)
+CFLAGS+=-DBINDIR=$(BINDIR) -DSHIMMER_VERSION=$(VERSION)
 
-SRC:=$(wildcard *.c) $(wildcard vendor/*.c)
+SRC:=$(wildcard *.c) $(wildcard lib/*.c)
 
 debug: CFLAGS+=-g
 debug: DATADIR=share
@@ -42,6 +42,6 @@ compile_commands.json: Makefile
 include $(patsubst %.c, .depend/%.d, $(SRC))
 
 clean:
-	rm -f *.o shimmer shimmer-init
+	rm -rf *.o lib/*.o shimmer shimmer-init example
 
 .PHONY: clean
