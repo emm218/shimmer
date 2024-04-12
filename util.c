@@ -41,7 +41,6 @@ project_root(const char *const prog_name)
 		return -1;
 	}
 	while (fstatat(fd1, "shimmer.toml", &st, 0) == -1) {
-		printf("up\n");
 		fstat(fd1, &st);
 		if (st.st_ino == 2) {
 			fprintf(stderr, "%s: not in a shimmer project\n",
