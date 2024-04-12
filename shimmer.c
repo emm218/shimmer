@@ -18,8 +18,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifndef VERSION
-#error "VERSION should be defined"
+#ifndef SHIMMER_VERSION
+#error "SHIMMER_VERSION should be defined"
 #endif
 
 #define STR(S)	#S
@@ -135,5 +135,5 @@ help(void)
 void
 version(void)
 {
-	printf("shimmer v" XSTR(VERSION) "\n");
+	printf("shimmer v" XSTR(SHIMMER_VERSION) "\n");
 }
